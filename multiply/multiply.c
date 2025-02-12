@@ -17,7 +17,8 @@
 
 /* Size of the matrices to multiply */
 #ifndef SIZE
-#define SIZE 700
+#define SIZE 1100 //native exec
+//#define SIZE 500 //simulation exec
 #endif
 
 /* HINT: The Makefile allows you to specify L1 and L2 block sizes as
@@ -38,14 +39,41 @@ static volatile double mat_ref[SIZE][SIZE];
  * Matrix multiplication. This is the procedure you should try to
  * optimize.
  */
-static void
-matmul_opt()
+
+int min(int a, int b) 
 {
+	if (a<=b) return a;
+	else return b;
+}
+static void matmul_opt()
+{
+    int i, j, k, jj, kk, r;
+    int B = 16; // Larger block size for better cache use
+
+    for (jj = 0; jj < SIZE; jj += B) {
+        for (kk = 0; kk < SIZE; kk += B) {
+            for (i = 0; i < SIZE; i++) {
+                int j_end = (jj + B < SIZE) ? jj + B : SIZE;
+                int k_end = (kk + B < SIZE) ? kk + B : SIZE;
+                
+                for (j = jj; j < j_end; j++) {
+                    r = 0;
+                    for (k = kk; k < k_end; k++) {
+                        r += mat_a[i][k] * mat_b[k][j];
+                    }
+                    mat_c[i][j] += r;
+                }
+            }
+        }
+    }
+}
+
+
         /* TASK: Implement your optimized matrix multiplication
          * here. It should calculate mat_c := mat_a * mat_b. See
          * matmul_ref() for a reference solution.
          */
-}
+
 
 /**
  * Reference implementation of the matrix multiply algorithm. Used to
