@@ -45,6 +45,17 @@ matmul_opt()
          * here. It should calculate mat_c := mat_a * mat_b. See
          * matmul_ref() for a reference solution.
          */
+	for (int k = 0; k < SIZE; k++)
+	{
+		for (int i = 0; i < SIZE; i++)
+		{
+			double aik = mat_a[i][k];
+			for (int j = 0; j < SIZE; j++)
+			{
+				mat_c[i][j] += aik * mat_b[k][j];
+			}
+		}
+	}
 }
 
 /**
