@@ -52,8 +52,6 @@ struct avdc_cache_line {
 
 static uint64_t clock = 0;
 
-static uint64_t clock = 0;
-
 /**
  * Extract the cache line tag from a physical address.
  *
